@@ -1,6 +1,6 @@
 from sqladmin import ModelView
 from app.models.user import User
-from app.models.relations import Teacher,Class
+from app.models.relations import Parent, Child, Teacher,Class
 
 class UserAdmin(ModelView, model=User):
     column_list = [
@@ -29,6 +29,25 @@ class ClassAdmin(ModelView, model=Class):
         Class.id,
         Class.name,
         Class.teacher_id
+        # Teacher.is_active,
+        # Teacher.created_at,
+        # Teacher.updated_at,
+    ]
+
+class ParentAdmin(ModelView, model=Parent):
+    column_list = [
+        Parent.id,
+        Parent.name,
+        # Teacher.is_active,
+        # Teacher.created_at,
+        # Teacher.updated_at,
+    ]
+
+class ChildAdmin(ModelView, model=Child):
+    column_list = [
+        Child.id,
+        Child.name,
+        Child.parent_id
         # Teacher.is_active,
         # Teacher.created_at,
         # Teacher.updated_at,

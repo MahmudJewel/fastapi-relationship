@@ -9,7 +9,7 @@ from sqladmin import Admin, ModelView
 
 # import 
 from app.core.database import engine
-from app.models.admin import UserAdmin, TeacherAdmin, ClassAdmin
+from app.models.admin import UserAdmin, TeacherAdmin, ClassAdmin, ParentAdmin, ChildAdmin
 from app.api.routers.api import router
 # from app.core.settings import config
 
@@ -20,6 +20,8 @@ def init_routers(app_: FastAPI) -> None:
     admin.add_view(UserAdmin)
     admin.add_view(TeacherAdmin)
     admin.add_view(ClassAdmin)
+    admin.add_view(ParentAdmin)
+    admin.add_view(ChildAdmin)
 
 
 origins = [
