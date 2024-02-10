@@ -1,6 +1,12 @@
 from sqladmin import ModelView
 from app.models.user import User
-from app.models.relations import Parent, Child, Teacher,Class
+from app.models.relations import (Parent, 
+                                  Child, 
+                                  Teacher,
+                                  Class,
+                                  Employee,
+                                  Skill
+                                  )
 
 class UserAdmin(ModelView, model=User):
     column_list = [
@@ -48,6 +54,24 @@ class ChildAdmin(ModelView, model=Child):
         Child.id,
         Child.name,
         Child.parent_id
+        # Teacher.is_active,
+        # Teacher.created_at,
+        # Teacher.updated_at,
+    ]
+class EmployeeAdmin(ModelView, model=Employee):
+    column_list = [
+        Employee.id,
+        Employee.name,
+        # Employee.skill_id
+        # Teacher.is_active,
+        # Teacher.created_at,
+        # Teacher.updated_at,
+    ]
+class SkillAdmin(ModelView, model=Skill):
+    column_list = [
+        Skill.id,
+        Skill.name,
+        # Skill.employee_id
         # Teacher.is_active,
         # Teacher.created_at,
         # Teacher.updated_at,

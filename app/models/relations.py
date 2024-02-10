@@ -1,4 +1,4 @@
-from sqlalchemy import String, Column,Integer,ForeignKey
+from sqlalchemy import String, Column,Integer,ForeignKey, Table
 from sqlalchemy.orm import relationship
 
 from app.core.database import Base
@@ -32,3 +32,21 @@ class Child(Base):
 	parent_id = Column(Integer, ForeignKey("parents.id"))
 	parent = relationship("Parent", back_populates="children")
 
+# Many to many relation 
+association_table = Table(
+	"association", Base.metadata,
+	Column("employee_id", Integer, ForeignKey("employees.id")),
+	Column("skill_id", Integer, ForeignKey("skills.id"))
+)
+
+class Employee(Base):
+	__tablename__ = "employees"
+	id = Column(Integer, primary_key=True)
+	name = Column(String)
+	skill = relationship("Skill", secondary=association_table, back_populates="employee")
+
+class Skill(Base):
+	__tablename__ = "skills"
+	id = Column(Integer, primary_key=True)
+	name = Column(String)
+	employee = relationship("Employee", secondary=association_table, back_populates="skill")
