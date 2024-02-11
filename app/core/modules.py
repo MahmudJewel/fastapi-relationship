@@ -17,7 +17,7 @@ from app.models.admin import (UserAdmin,
                               EmployeeAdmin,
                               SkillAdmin
                               )
-from app.api.routers.api import router
+from app.api.routers.all_api import router
 # from app.core.settings import config
 
 def init_routers(app_: FastAPI) -> None:
