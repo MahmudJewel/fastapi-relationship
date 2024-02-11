@@ -7,7 +7,7 @@ relation_router = APIRouter()
 relation_router.include_router(
     relation_module,
     prefix="/relation",
-    tags=["relationship"],
+    tags=["Relationship"],
     responses={404: {"description": "Not found"}},
 )
 
