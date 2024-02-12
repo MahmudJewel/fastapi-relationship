@@ -2,6 +2,7 @@ from fastapi import HTTPException, status, Depends
 from typing import Annotated
 from datetime import datetime, timedelta, timezone
 
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 # import 
@@ -43,12 +44,23 @@ def read_all_child(db: Session, skip: int, limit: int):
 
 # =============== m2m operations ==========================
 # create new employee
-def create_new_employee(db: Session, employee: AllEmployee):
-    new_employee = RelationModel.Employee(name=employee.name, skill=employee.skill )
-    db.add(new_employee)
+async def create_new_employee(db: Session, employee: AllEmployee):
+    employee_dict = employee.model_dump() # extracting th data
+    skills = employee_dict.pop('skill')
+    db_employee = RelationModel.Employee(**employee_dict)
+    db.add(db_employee)
     db.commit()
-    db.refresh(new_employee)
-    return new_employee
+    db.refresh(db_employee, ["skill"]) # Employee.skill attribute will be updated with the current value stored in the corresponding database record, ensuring that you have the most up-to-date data in your object.
+    for skill in skills:
+        # print('skills =========> ', skill['name'])
+        query = select(RelationModel.Skill).where(RelationModel.Skill.name == skill['name'])
+        db_skill = (db.execute(query)).scalar_one_or_none() # it will return one value or none
+        if db_skill is None:
+            db_skill = RelationModel.Skill(name=skill['name'])
+            db.add(db_skill)
+        db_employee.skill.append(db_skill)
+    db.commit()
+    return db_employee
 
 # get all employee
 def read_all_employee(db: Session, skip: int, limit: int):

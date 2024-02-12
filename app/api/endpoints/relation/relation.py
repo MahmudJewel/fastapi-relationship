@@ -53,9 +53,11 @@ async def read_all_child( skip: int = 0, limit: int = 100,  db: Session = Depend
 
 # ===================== many2many operation ==================
 # create new employee 
-@relation_module.post('/employee', response_model=AllEmployee)
+@relation_module.post('/employee', 
+                      response_model=AllEmployee
+                      )
 async def create_new_employee(employee: EmployeeCreate, db: Session = Depends(get_db)):
-    new_employee = relation_functions.create_new_employee(db, employee)
+    new_employee = await relation_functions.create_new_employee(db, employee)
     return new_employee
 
 # get all employee list
