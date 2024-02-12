@@ -6,7 +6,12 @@ from sqlalchemy.orm import Session
 
 # import 
 from app.models import relations as RelationModel
-from app.schemas.relation import ParentCreate, ChildCreate
+from app.schemas.relation import (
+    ParentCreate,  
+    ChildCreate, 
+    AllEmployee,
+    AllSkills
+    )
 from app.core.settings import SECRET_KEY, ALGORITHM
 from app.core.dependencies import get_db, oauth2_scheme
 
@@ -36,4 +41,20 @@ def create_new_child(db: Session, child: ChildCreate):
 def read_all_child(db: Session, skip: int, limit: int):
     return db.query(RelationModel.Child).offset(skip).limit(limit).all()
 
+# =============== m2m operations ==========================
+# create new employee
+def create_new_employee(db: Session, employee: AllEmployee):
+    new_employee = RelationModel.Employee(name=employee.name, skill=employee.skill )
+    db.add(new_employee)
+    db.commit()
+    db.refresh(new_employee)
+    return new_employee
+
+# get all employee
+def read_all_employee(db: Session, skip: int, limit: int):
+    return db.query(RelationModel.Employee).offset(skip).limit(limit).all()
+
+# get all skill
+def read_all_skill(db: Session, skip: int, limit: int):
+    return db.query(RelationModel.Skill).offset(skip).limit(limit).all()
 
