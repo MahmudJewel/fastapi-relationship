@@ -11,7 +11,9 @@ from app.schemas.relation import (
     ParentCreate,  
     ChildCreate, 
     AllEmployee,
-    AllSkills
+    EmployeeCreate,
+    AllSkills,
+    SkillCreate
     )
 from app.core.settings import SECRET_KEY, ALGORITHM
 from app.core.dependencies import get_db, oauth2_scheme
@@ -44,7 +46,7 @@ def read_all_child(db: Session, skip: int, limit: int):
 
 # =============== m2m operations ==========================
 # create new employee
-async def create_new_employee(db: Session, employee: AllEmployee):
+async def create_new_employee(db: Session, employee: EmployeeCreate):
     employee_dict = employee.model_dump() # extracting th data
     skills = employee_dict.pop('skill')
     db_employee = RelationModel.Employee(**employee_dict)
@@ -66,7 +68,18 @@ async def create_new_employee(db: Session, employee: AllEmployee):
 def read_all_employee(db: Session, skip: int, limit: int):
     return db.query(RelationModel.Employee).offset(skip).limit(limit).all()
 
+# ================ skills =================== 
 # get all skill
 def read_all_skill(db: Session, skip: int, limit: int):
     return db.query(RelationModel.Skill).offset(skip).limit(limit).all()
+
+# create new skill
+async def create_new_skill(db: Session, skill: SkillCreate):
+    # skill_dict = skill.model_dump() # extracting the data
+    db_skill = RelationModel.Skill(name= skill.name)
+    print('DB_Skill ==============> ', db_skill)
+    db.add(db_skill)
+    db.commit()
+    db.refresh( db_skill )
+    return db_skill
 

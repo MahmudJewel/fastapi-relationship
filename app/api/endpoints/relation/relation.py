@@ -73,5 +73,13 @@ async def read_all_employee( skip: int = 0, limit: int = 100,  db: Session = Dep
             response_model=list[AllSkills],
             # dependencies=[Depends(RoleChecker(['admin']))]
             )
-async def read_all_employee( skip: int = 0, limit: int = 100,  db: Session = Depends(get_db)):
+async def read_all_skill( skip: int = 0, limit: int = 100,  db: Session = Depends(get_db)):
     return relation_functions.read_all_skill(db, skip, limit)
+
+# create new employee 
+@relation_module.post('/skill', 
+                      response_model=AllSkills
+                      )
+async def create_new_skill(skill: SkillCreate, db: Session = Depends(get_db)):
+    new_skill = await relation_functions.create_new_skill(db, skill)
+    return new_skill

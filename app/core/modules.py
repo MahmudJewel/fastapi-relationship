@@ -9,9 +9,7 @@ from sqladmin import Admin, ModelView
 
 # import 
 from app.core.database import engine
-from app.models.admin import (UserAdmin, 
-                              TeacherAdmin, 
-                              ClassAdmin, 
+from app.models.admin import (  
                               ParentAdmin, 
                               ChildAdmin,
                               EmployeeAdmin,
@@ -24,9 +22,6 @@ def init_routers(app_: FastAPI) -> None:
     app_.include_router(router)
     # admin dashboard 
     admin = Admin(app_, engine)
-    admin.add_view(UserAdmin)
-    admin.add_view(TeacherAdmin)
-    admin.add_view(ClassAdmin)
     admin.add_view(ParentAdmin)
     admin.add_view(ChildAdmin)
     admin.add_view(EmployeeAdmin)

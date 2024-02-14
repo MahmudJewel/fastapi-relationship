@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional, List
 from app.models.relations import Skill
@@ -41,10 +41,11 @@ class AllEmployee(BaseModel):
     skill: list[SkillForEmployee]
 
 # ==================== skills =========================
+class EmployeeBase(BaseModel):
+    name: str
 class SkillCreate(BaseModel):
     name: str
-    employee_id: list[int]
-
+    employee: list[EmployeeBase] | None = None
 class EmployeeForSkill(BaseModel):
     id: int
     name: str
