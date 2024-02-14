@@ -1,71 +1,22 @@
-# FastAPI Starter Kit
+# Relationships in FastAPI
 ## Features:
-* FastAPI project structure tree
-* user module
-    - id, first name, last name, **email** as username, **password**, role, is_active created_at, updated_at 
-* admin dashboard => sqladmin
-* authentication => JWT
-* db migration => alembic
-* CORS middleware
+* Many to one relationship (ForeignKey)
+* Many to many relationships 
+* One to one relationship
 
-## Structured Tree
-```sh
-├── alembic     # Manages database migrations
-├── alembic.ini
-├── app
-│   ├── api
-│   │   ├── endpoints   # Contains modules for each feature (user, product, payments).
-│   │   │   ├── __init__.py
-│   │   │   └── user
-│   │   │       ├── auth.py
-│   │   │       ├── functions.py
-│   │   │       ├── __init__.py
-│   │   │       └── user.py
-│   │   ├── __init__.py
-│   │   └── routers     # Contains FastAPI routers, where each router corresponds to a feature.
-│   │       ├── api.py
-│   │       ├── __init__.py
-│   │       └── user.py
-│   ├── core    # Contains core functionality like database management, dependencies, etc. 
-│   │   ├── database.py
-│   │   ├── dependencies.py
-│   │   ├── __init__.py
-│   │   └── settings.py
-│   ├── __init__.py
-│   ├── main.py     # Initializes the FastAPI app and brings together various components.
-│   ├── models      # Contains modules defining database models for users, products, payments, etc.
-│   │   ├── admin.py
-│   │   ├── common.py
-│   │   ├── __init__.py
-│   │   └── user.py
-│   ├── schemas
-│   │   ├── __init__.py
-│   │   └── user.py
-│   └── utils       # Can include utility functions that are used across different features.
-├── requirements.txt # Lists project dependencies.
-```
-**app/api/endpoints/**: Contains modules for each feature (user, product, payments).
+## Many to one relationship (ForeignKey)
+Instances
+* Parents
+* Child
+Parents have many childs but childs have many parents
 
-**app/api/routers/**: Contains FastAPI routers, where each router corresponds to a feature.
-
-**app/models/**: Contains modules defining database models for users, products, payments, etc.
-
-**app/core/**: Contains core functionality like database management, dependencies, etc.
-
-**app/utils/**: Can include utility functions that are used across different features.
-
-**app/main.py**: Initializes the FastAPI app and brings together various components.
-
-**tests/**: Houses your test cases.
-
-**alembic/**: Manages database migrations.
-
-**docs/**: Holds documentation files.
-
-**scripts/**: Contains utility scripts.
-
-**requirements.txt**: Lists project dependencies.
-
+### API list for M-1 relationships
+| SRL | METHOD | ROUTE | FUNCTIONALITY | Required Fields | 
+| ------- | ------- | ----- | ------------- | ------------- |
+| *1* | *POST* | ```/login``` | _Login user_| _email, password_|
+| *2* | *POST* | ```/users/``` | _Create new user_|_email, password_|
+| *3* | *GET* | ```/users/``` | _Get all users list_|_None_|
+| *4* | *GET* | ```/users/me/``` | _Get current user details_|_None_|
 
 # Setup
 The first thing to do is to clone the repository:

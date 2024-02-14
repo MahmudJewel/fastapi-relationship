@@ -6,7 +6,7 @@ from sqlalchemy import pool
 from alembic import context
 
 from app.core.database import Base
-from app.models.relations import Parent, Child, Teacher,Class, Employee, Skill
+from app.models.relations import Parent, Child, Employee, Skill
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config

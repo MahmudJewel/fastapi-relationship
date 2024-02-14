@@ -18,19 +18,20 @@ from app.schemas.relation import (
     )
 from app.api.endpoints.relation import functions as relation_functions
 
-relation_module = APIRouter()
+many2one_module = APIRouter()
+many2many_module = APIRouter()
 
 
 # ================== foreign key operation ===========================
 
 # create new parents 
-@relation_module.post('/parents', response_model=Parent)
+@many2one_module.post('/parents', response_model=Parent)
 async def create_new_parent(parent: ParentCreate, db: Session = Depends(get_db)):
     new_parent = relation_functions.create_new_parent(db, parent)
     return new_parent
 
 # get all parents list
-@relation_module.get('/parents', 
+@many2one_module.get('/parents', 
             response_model=list[Parent],
             # dependencies=[Depends(RoleChecker(['admin']))]
             )
@@ -38,22 +39,31 @@ async def read_all_parents( skip: int = 0, limit: int = 100,  db: Session = Depe
     return relation_functions.read_all_parents(db, skip, limit)
 
 # create new child 
-@relation_module.post('/child', response_model=Child)
+@many2one_module.post('/child', response_model=Child)
 async def create_new_child(child: ChildCreate, db: Session = Depends(get_db)):
     new_child = relation_functions.create_new_child(db, child)
     return new_child
 
 # get all child list
-@relation_module.get('/child', 
-            response_model=list[Child],
+@many2one_module.get('/child', 
+            # response_model=list[Child],
             # dependencies=[Depends(RoleChecker(['admin']))]
             )
 async def read_all_child( skip: int = 0, limit: int = 100,  db: Session = Depends(get_db)):
     return relation_functions.read_all_child(db, skip, limit)
 
+
+@many2one_module.get('/child-with-parents-info', 
+            response_model=list[Child],
+            # dependencies=[Depends(RoleChecker(['admin']))]
+            )
+async def read_all_child_with_parent_info( skip: int = 0, limit: int = 100,  db: Session = Depends(get_db)):
+    return relation_functions.read_all_child_with_parent_info(db, skip, limit)
+
+
 # ===================== many2many operation ==================
 # create new employee 
-@relation_module.post('/employee', 
+@many2many_module.post('/employee', 
                       response_model=AllEmployee
                       )
 async def create_new_employee(employee: EmployeeCreate, db: Session = Depends(get_db)):
@@ -61,7 +71,7 @@ async def create_new_employee(employee: EmployeeCreate, db: Session = Depends(ge
     return new_employee
 
 # get all employee list
-@relation_module.get('/employee', 
+@many2many_module.get('/employee', 
             response_model=list[AllEmployee],
             # dependencies=[Depends(RoleChecker(['admin']))]
             )
@@ -69,7 +79,7 @@ async def read_all_employee( skip: int = 0, limit: int = 100,  db: Session = Dep
     return relation_functions.read_all_employee(db, skip, limit)
 
 # get all skill list
-@relation_module.get('/skill', 
+@many2many_module.get('/skill', 
             response_model=list[AllSkills],
             # dependencies=[Depends(RoleChecker(['admin']))]
             )
@@ -77,7 +87,7 @@ async def read_all_skill( skip: int = 0, limit: int = 100,  db: Session = Depend
     return relation_functions.read_all_skill(db, skip, limit)
 
 # create new employee 
-@relation_module.post('/skill', 
+@many2many_module.post('/skill', 
                       response_model=AllSkills
                       )
 async def create_new_skill(skill: SkillCreate, db: Session = Depends(get_db)):

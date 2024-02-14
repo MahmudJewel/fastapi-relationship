@@ -7,19 +7,25 @@ from app.models.relations import Skill
 class ParentCreate(BaseModel):
     name: str
 
+class ChildForParents(BaseModel):
+    id: int
+    name: str
 
 class Parent(ParentCreate):
     id: int
-
+    children: list[ChildForParents] | None = None
 
 class ChildCreate(BaseModel):
     name: str
     parent_id: int
 
-
-class Child(ChildCreate):
+class ParentsForChild(BaseModel):
     id: int
-
+    name: str
+class Child(BaseModel):
+    id: int
+    name: str
+    parent: list[ParentsForChild] | None = None
 
 # ==================== many to many relations ======================
 

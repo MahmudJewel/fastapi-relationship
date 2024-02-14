@@ -9,7 +9,9 @@ from sqlalchemy.orm import Session
 from app.models import relations as RelationModel
 from app.schemas.relation import (
     ParentCreate,  
-    ChildCreate, 
+    ChildCreate,
+    Child,
+    ParentsForChild, 
     AllEmployee,
     EmployeeCreate,
     AllSkills,
@@ -42,7 +44,21 @@ def create_new_child(db: Session, child: ChildCreate):
 
 # get all child 
 def read_all_child(db: Session, skip: int, limit: int):
-    return db.query(RelationModel.Child).offset(skip).limit(limit).all()
+    query = db.query(RelationModel.Child).offset(skip).limit(limit).all()
+    return query
+
+# get all child with parent details
+def read_all_child_with_parent_info(db: Session, skip: int, limit: int):
+    query = db.query(RelationModel.Child, RelationModel.Parent).join(RelationModel.Parent, RelationModel.Child.parent_id== RelationModel.Parent.id).offset(skip).limit(limit).all()
+    children_with_parent_info = []
+    for child, parent in query:
+        child_response = Child(
+            id=child.id,
+            name=child.name,
+            parent=[ParentsForChild(id=parent.id, name=parent.name)]
+        )
+        children_with_parent_info.append(child_response)
+    return children_with_parent_info
 
 # =============== m2m operations ==========================
 # create new employee
