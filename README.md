@@ -8,20 +8,50 @@
 Instances
 * Parents
 * Child
-Parents have many childs but childs have many parents
+
+Parents have many childs but childs have one parents
 
 ### API list for M-1 relationships
-| SRL | METHOD | ROUTE | FUNCTIONALITY | Required Fields | 
+| SRL | METHOD | ROUTE | FUNCTIONALITY | Fields | 
 | ------- | ------- | ----- | ------------- | ------------- |
-| *1* | *POST* | ```/login``` | _Login user_| _email, password_|
-| *2* | *POST* | ```/users/``` | _Create new user_|_email, password_|
-| *3* | *GET* | ```/users/``` | _Get all users list_|_None_|
-| *4* | *GET* | ```/users/me/``` | _Get current user details_|_None_|
+| *1* | *POST* | ```/relation/parents``` | _create parents_| _**name**_|
+| *2* | *GET* | ```/relation/parents``` | _All parents info with childs_|_id, name, children(id,name)_|
+| *3* | *POST* | ```/relation/child``` | _Create Child_|_**name**, parent_id_|
+| *4* | *GET* | ```/relation/child``` | _All child info with parent_id_|_None_|
+| *5* | *GET* | ```/relation/child-with-parents-info``` | _All child info with parent info_|_id, name, parent(id, name)_|
+
+#### Example
+GET ==> /relation/child-with-parents-info
+```sh
+[
+  {
+    "id": 1,
+    "name": "Habib",
+    "parent": [
+      {
+        "id": 2,
+        "name": "Sattar Miah"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Jasim",
+    "parent": [
+      {
+        "id": 1,
+        "name": "Abdus Salam"
+      }
+    ]
+  }
+]
+```
+
 
 # Setup
 The first thing to do is to clone the repository:
 ```sh
-$ https://github.com/MahmudJewel/fastapi-starter-kit
+$ https://github.com/MahmudJewel/fastapi-relationship
 ```
 
 Create a virtual environment to install dependencies in and activate it:
@@ -34,9 +64,6 @@ Then install the dependencies:
 ```sh
 # for fixed version
 (venv)$ pip install -r requirements.txt
-
-# or for updated version
-(venv)$ pip install -r dev.txt
 ```
 Note the `(venv)` in front of the prompt. This indicates that this terminal
 session operates in a virtual environment set up by `virtualenv2`.
@@ -49,19 +76,6 @@ Once `pip` has finished downloading the dependencies:
 # start the server 
 (venv)$ uvicorn app.main:app --reload
 ```
-
-## User module's API
-| SRL | METHOD | ROUTE | FUNCTIONALITY | Required Fields | 
-| ------- | ------- | ----- | ------------- | ------------- |
-| *1* | *POST* | ```/login``` | _Login user_| _email, password_|
-| *2* | *POST* | ```/users/``` | _Create new user_|_email, password_|
-| *3* | *GET* | ```/users/``` | _Get all users list_|_None_|
-| *4* | *GET* | ```/users/me/``` | _Get current user details_|_None_|
-| *5* | *GET* | ```/users/{user_id}``` | _Get indivisual users details_|_None_|
-| *6* | *PATCH* | ```/users/{user_id}``` | _Update the user partially_|_email, password, is_active, role_|
-| *7* | *DELETE* | ```/users/{user_id}``` | _Delete the user_|_None_| _admin_|
-| *8* | *GET* | ```/``` | _Home page_|_None_|
-| *9* | *GET* | ```/admin``` | _Admin Dashboard_|_None_|
 
 
 # Tools
@@ -80,6 +94,6 @@ Once `pip` has finished downloading the dependencies:
     python-jose
     alembic
 
-# Happy Coding
-## From ==> Mahmud
+## Happy Coding
+From ==> Mahmud
 
