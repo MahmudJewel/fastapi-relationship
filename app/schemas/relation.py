@@ -47,7 +47,7 @@ class SkillBase(BaseModel):
 
 class EmployeeCreate(BaseModel):
 	name: str
-	skill: list[SkillBase]
+	skill: list[SkillBase] | None = None
 
 
 class SkillForEmployee(BaseModel):

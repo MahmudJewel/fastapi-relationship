@@ -46,7 +46,23 @@ GET ==> /relation/child-with-parents-info
   }
 ]
 ```
+## Many to many relationship
+Instances
+* Employee
+* skill
 
+Employees can have many skills and one skill can be on many employees. 
+
+### API list for M-2-M relationships
+| SRL | METHOD | ROUTE | FUNCTIONALITY | Fields | 
+| ------- | ------- | ----- | ------------- | ------------- |
+| *1* | *POST* | ```/relation/employee``` | _create employee_| _**name**, skill(name)_|
+| *2* | *GET* | ```/relation/employee``` | _All employees info with skill info_|_id, name, skill(id,name)_|
+| *3* | *POST* | ```/relation/child``` | _Create Child_|_**name**, parent_id_|
+| *4* | *GET* | ```/relation/child``` | _All child info with parent_id_|_None_|
+| *5* | *GET* | ```/relation/child-with-parents-info``` | _All child info with parent info_|_id, name, parent(id, name)_|
+
+#### Example
 
 # Setup
 The first thing to do is to clone the repository:

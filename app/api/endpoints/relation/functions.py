@@ -63,20 +63,21 @@ def read_all_child_with_parent_info(db: Session, skip: int, limit: int):
 # =============== m2m operations ==========================
 # create new employee
 async def create_new_employee(db: Session, employee: EmployeeCreate):
-    employee_dict = employee.model_dump() # extracting th data
+    employee_dict = employee.model_dump() # extracting the data
     skills = employee_dict.pop('skill')
     db_employee = RelationModel.Employee(**employee_dict)
     db.add(db_employee)
     db.commit()
     db.refresh(db_employee, ["skill"]) # Employee.skill attribute will be updated with the current value stored in the corresponding database record, ensuring that you have the most up-to-date data in your object.
-    for skill in skills:
-        # print('skills =========> ', skill['name'])
-        query = select(RelationModel.Skill).where(RelationModel.Skill.name == skill['name'])
-        db_skill = (db.execute(query)).scalar_one_or_none() # it will return one value or none
-        if db_skill is None:
-            db_skill = RelationModel.Skill(name=skill['name'])
-            db.add(db_skill)
-        db_employee.skill.append(db_skill)
+    if skills is not None:
+        for skill in skills:
+            # print('skills =========> ', skill['name'])
+            query = select(RelationModel.Skill).where(RelationModel.Skill.name == skill['name'])
+            db_skill = (db.execute(query)).scalar_one_or_none() # it will return one value or none
+            if db_skill is None:
+                db_skill = RelationModel.Skill(name=skill['name'])
+                db.add(db_skill)
+            db_employee.skill.append(db_skill)
     db.commit()
     return db_employee
 
