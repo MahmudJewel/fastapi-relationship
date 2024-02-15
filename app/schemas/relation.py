@@ -1,35 +1,24 @@
-from pydantic import BaseModel, Field
-from datetime import datetime
-from typing import Optional, List
-from app.models.relations import Skill
-
+from pydantic import BaseModel
 
 # ================ foreign keys =================
 class ParentCreate(BaseModel):
 	name: str
 
-
 class ChildForParents(BaseModel):
 	id: int
 	name: str
 
-
 class Parent(ParentCreate):
 	id: int
 	children: list[ChildForParents] | None = None
-	class Config:
-		fields = {"id": "id", "name":"name", "children":"children"}
-
 
 class ChildCreate(BaseModel):
 	name: str
 	parent_id: int | None = None
 
-
 class ParentsForChild(BaseModel):
 	id: int
 	name: str
-
 
 class Child(BaseModel):
 	id: int
@@ -66,18 +55,17 @@ class AllEmployee(BaseModel):
 class EmployeeBase(BaseModel):
 	name: str
 
-
-class SkillCreate(BaseModel):
-	name: str
-	employee: list[EmployeeBase] | None = None
-
+class SkillCreate(EmployeeBase):
+	pass
 
 class EmployeeForSkill(BaseModel):
 	id: int
 	name: str
 
-
 class AllSkills(BaseModel):
 	id: int
 	name: str
 	employee: list[EmployeeForSkill]
+
+class AllSkillsWithoutEmployee(EmployeeForSkill):
+	pass

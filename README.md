@@ -58,11 +58,50 @@ Employees can have many skills and one skill can be on many employees.
 | ------- | ------- | ----- | ------------- | ------------- |
 | *1* | *POST* | ```/relation/employee``` | _create employee_| _**name**, skill(name)_|
 | *2* | *GET* | ```/relation/employee``` | _All employees info with skill info_|_id, name, skill(id,name)_|
-| *3* | *POST* | ```/relation/child``` | _Create Child_|_**name**, parent_id_|
-| *4* | *GET* | ```/relation/child``` | _All child info with parent_id_|_None_|
-| *5* | *GET* | ```/relation/child-with-parents-info``` | _All child info with parent info_|_id, name, parent(id, name)_|
+| *3* | *POST* | ```/relation/skill``` | _Create unique skill_|_**name**_|
+| *4* | *GET* | ```/relation/skill``` | _All skill info_|_id, name_|
+| *5* | *GET* | ```/relation/skill-with-employee-details``` | _All skill info with employee info_|_id, name, employee(id, name)_|
 
 #### Example
+/relation/skill-with-employee-details
+```sh
+[
+  {
+    "id": 1,
+    "name": "Python",
+    "employee": [
+      {
+        "id": 1,
+        "name": "Mahmud"
+      },
+      {
+        "id": 2,
+        "name": "Jahid"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "FastAPI",
+    "employee": [
+      {
+        "id": 1,
+        "name": "Mahmud"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Django",
+    "employee": [
+      {
+        "id": 1,
+        "name": "Mahmud"
+      }
+    ]
+  }
+]
+```
 
 # Setup
 The first thing to do is to clone the repository:
@@ -72,13 +111,12 @@ $ https://github.com/MahmudJewel/fastapi-relationship
 
 Create a virtual environment to install dependencies in and activate it:
 ```sh
-$ cd fastapi-starter-kit
+$ cd fastapi-relationship
 $ python -m venv venv
 $ source venv/bin/activate
 ```
 Then install the dependencies:
 ```sh
-# for fixed version
 (venv)$ pip install -r requirements.txt
 ```
 Note the `(venv)` in front of the prompt. This indicates that this terminal
@@ -110,6 +148,6 @@ Once `pip` has finished downloading the dependencies:
     python-jose
     alembic
 
-## Happy Coding
+#### Happy Coding
 From ==> Mahmud
 

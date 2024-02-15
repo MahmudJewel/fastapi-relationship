@@ -1,5 +1,5 @@
 from sqlalchemy import String, Column, Integer, ForeignKey, Table
-from sqlalchemy.orm import relationship, Mapped, mapped_column
+from sqlalchemy.orm import relationship
 
 from app.core.database import Base
 
@@ -45,7 +45,7 @@ class Skill(Base):
     __tablename__ = "skills"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(String, unique=True)
     employee = relationship(
         "Employee", secondary=employee_skill, back_populates="skill"
     )

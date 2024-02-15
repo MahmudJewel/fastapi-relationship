@@ -1,10 +1,6 @@
-from fastapi import HTTPException, status, Depends
-from typing import Annotated
-from datetime import datetime, timedelta, timezone
-
+from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-
 # import 
 from app.models import relations as RelationModel
 from app.schemas.relation import (
@@ -19,7 +15,6 @@ from app.schemas.relation import (
     )
 from app.core.settings import SECRET_KEY, ALGORITHM
 from app.core.dependencies import get_db, oauth2_scheme
-
 
 # ================== foreign key operation ===========================
 # create new parents
@@ -87,16 +82,27 @@ def read_all_employee(db: Session, skip: int, limit: int):
 
 # ================ skills =================== 
 # get all skill
-def read_all_skill(db: Session, skip: int, limit: int):
+async def read_all_skill(db: Session, skip: int, limit: int):
     return db.query(RelationModel.Skill).offset(skip).limit(limit).all()
+
+# get all skill with employee details
+async def read_all_skill_with_employee_details(db: Session, skip: int, limit: int):
+    return db.query(RelationModel.Skill).offset(skip).limit(limit).all()
+
+# get skill by name 
+def get_skill_by_name(db: Session, name: str):
+    skill = db.query(RelationModel.Skill).filter(RelationModel.Skill.name == name).first()
+    return skill
 
 # create new skill
 async def create_new_skill(db: Session, skill: SkillCreate):
-    # skill_dict = skill.model_dump() # extracting the data
-    db_skill = RelationModel.Skill(name= skill.name)
-    print('DB_Skill ==============> ', db_skill)
-    db.add(db_skill)
+    db_skill = get_skill_by_name(db=db, name=skill.name)
+    print('Exists ==============> ', db_skill)
+    if db_skill:
+        raise HTTPException(status_code=404, detail="Skill already exists")
+    new_skill = RelationModel.Skill(name= skill.name)
+    db.add(new_skill)
     db.commit()
-    db.refresh( db_skill )
-    return db_skill
+    db.refresh( new_skill )
+    return new_skill
 

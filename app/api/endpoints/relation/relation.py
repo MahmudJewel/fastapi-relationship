@@ -1,11 +1,9 @@
 # fastapi 
-from fastapi import APIRouter, Depends, HTTPException
-
+from fastapi import APIRouter, Depends
 # sqlalchemy
 from sqlalchemy.orm import Session
-
 # import
-from app.core.dependencies import get_db, oauth2_scheme 
+from app.core.dependencies import get_db 
 from app.schemas.relation import (
     ParentCreate, 
     Parent, 
@@ -14,6 +12,7 @@ from app.schemas.relation import (
     AllEmployee,
     EmployeeCreate,
     AllSkills,
+    AllSkillsWithoutEmployee,
     SkillCreate
     )
 from app.api.endpoints.relation import functions as relation_functions
@@ -21,9 +20,7 @@ from app.api.endpoints.relation import functions as relation_functions
 many2one_module = APIRouter()
 many2many_module = APIRouter()
 
-
 # ================== foreign key operation ===========================
-
 # create new parents 
 @many2one_module.post('/parents', response_model=Parent)
 async def create_new_parent(parent: ParentCreate, db: Session = Depends(get_db)):
@@ -52,7 +49,6 @@ async def create_new_child(child: ChildCreate, db: Session = Depends(get_db)):
 async def read_all_child( skip: int = 0, limit: int = 100,  db: Session = Depends(get_db)):
     return relation_functions.read_all_child(db, skip, limit)
 
-
 @many2one_module.get('/child-with-parents-info', 
             response_model=list[Child],
             # dependencies=[Depends(RoleChecker(['admin']))]
@@ -80,15 +76,21 @@ async def read_all_employee( skip: int = 0, limit: int = 100,  db: Session = Dep
 
 # get all skill list
 @many2many_module.get('/skill', 
-            response_model=list[AllSkills],
-            # dependencies=[Depends(RoleChecker(['admin']))]
+            response_model=list[AllSkillsWithoutEmployee],
             )
 async def read_all_skill( skip: int = 0, limit: int = 100,  db: Session = Depends(get_db)):
-    return relation_functions.read_all_skill(db, skip, limit)
+    return await relation_functions.read_all_skill(db, skip, limit)
+
+# get all skill with employee details
+@many2many_module.get('/skill-with-employee-details', 
+            response_model=list[AllSkills],
+            )
+async def read_all_skill_with_employee_details( skip: int = 0, limit: int = 100,  db: Session = Depends(get_db)):
+    return await relation_functions.read_all_skill_with_employee_details(db, skip, limit)
 
 # create new employee 
 @many2many_module.post('/skill', 
-                      response_model=AllSkills
+                      response_model=AllSkillsWithoutEmployee
                       )
 async def create_new_skill(skill: SkillCreate, db: Session = Depends(get_db)):
     new_skill = await relation_functions.create_new_skill(db, skill)
