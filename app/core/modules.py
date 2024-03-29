@@ -13,7 +13,9 @@ from app.models.admin import (
                               ParentAdmin, 
                               ChildAdmin,
                               EmployeeAdmin,
-                              SkillAdmin
+                              SkillAdmin,
+                              UserAdmin,
+                              VisaAdmin
                               )
 from app.api.routers.all_api import router
 # from app.core.settings import config
@@ -26,6 +28,8 @@ def init_routers(app_: FastAPI) -> None:
     admin.add_view(ChildAdmin)
     admin.add_view(EmployeeAdmin)
     admin.add_view(SkillAdmin)
+    admin.add_view(UserAdmin)
+    admin.add_view(VisaAdmin)
 
 
 origins = [

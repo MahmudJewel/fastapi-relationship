@@ -11,8 +11,51 @@ from app.schemas.relation import (
     AllEmployee,
     EmployeeCreate,
     AllSkills,
-    SkillCreate
+    SkillCreate,
+    UserCreate
     )
+
+# ================== one to one relation ===========================
+# create new user
+def create_new_user(db: Session, user: UserCreate):
+    new_user = RelationModel.User(name=user.name)
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return new_user
+
+# get all user
+def read_all_users(db: Session, skip: int, limit: int):
+    return db.query(RelationModel.User).offset(skip).limit(limit).all()
+
+# # create new child
+# def create_new_child(db: Session, child: ChildCreate):
+#     new_child = RelationModel.Child(name=child.name, parent_id=child.parent_id )
+#     db.add(new_child)
+#     db.commit()
+#     db.refresh(new_child)
+#     return new_child
+
+# # get all child 
+# def read_all_child(db: Session, skip: int, limit: int):
+#     query = db.query(RelationModel.Child).offset(skip).limit(limit).all()
+#     return query
+
+# # get all child with parent details
+# def read_all_child_with_parent_info(db: Session, skip: int, limit: int):
+#     # query = db.query(RelationModel.Child, RelationModel.Parent).join(RelationModel.Parent, RelationModel.Child.parent_id== RelationModel.Parent.id).offset(skip).limit(limit).all()
+#     # children_with_parent_info = []
+#     # for child, parent in query:
+#     #     child_response = Child(
+#     #         id=child.id,
+#     #         name=child.name,
+#     #         parent=[ParentsForChild(id=parent.id, name=parent.name)]
+#     #     )
+#     #     children_with_parent_info.append(child_response)
+#     # return children_with_parent_info
+#     query = db.query(RelationModel.Child).offset(skip).limit(limit).all()
+#     return query
+
 
 # ================== foreign key operation ===========================
 # create new parents

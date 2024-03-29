@@ -13,12 +13,52 @@ from app.schemas.relation import (
     EmployeeCreate,
     AllSkills,
     AllSkillsWithoutEmployee,
-    SkillCreate
+    SkillCreate,
+    User,
+    UserCreate
     )
 from app.api.endpoints.relation import functions as relation_functions
 
+one2one_module = APIRouter()
 many2one_module = APIRouter()
 many2many_module = APIRouter()
+
+
+# ================== One to one relation ===========================
+# create new user 
+@one2one_module.post('/user', response_model=User)
+async def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
+    new_user = relation_functions.create_new_user(db, user)
+    return new_user
+
+# get all user list
+@one2one_module.get('/user', 
+            response_model=list[User],
+            # dependencies=[Depends(RoleChecker(['admin']))]
+            )
+async def read_all_users( skip: int = 0, limit: int = 100,  db: Session = Depends(get_db)):
+    return relation_functions.read_all_users(db, skip, limit)
+
+# # create new child 
+# @one2one_module.post('/child', response_model=Child)
+# async def create_new_child(child: ChildCreate, db: Session = Depends(get_db)):
+#     new_child = relation_functions.create_new_child(db, child)
+#     return new_child
+
+# # get all child list
+# @one2one_module.get('/child', 
+#             # response_model=list[Child],
+#             # dependencies=[Depends(RoleChecker(['admin']))]
+#             )
+# async def read_all_child( skip: int = 0, limit: int = 100,  db: Session = Depends(get_db)):
+#     return relation_functions.read_all_child(db, skip, limit)
+
+# @one2one_module.get('/child-with-parents-info', 
+#             response_model=list[Child],
+#             # dependencies=[Depends(RoleChecker(['admin']))]
+#             )
+# async def read_all_child_with_parent_info( skip: int = 0, limit: int = 100,  db: Session = Depends(get_db)):
+#     return relation_functions.read_all_child_with_parent_info(db, skip, limit)
 
 # ================== foreign key operation ===========================
 # create new parents 

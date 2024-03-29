@@ -1,6 +1,18 @@
 from pydantic import BaseModel
 from typing import Optional
 
+# ================ One to one relation =================
+class UserCreate(BaseModel):
+	name: str
+
+class VisforUser(BaseModel):
+	id: int
+	name: str
+class User(BaseModel):
+	id: int
+	name: str
+	visa: Optional[VisforUser]
+
 # ================ foreign keys =================
 class ParentCreate(BaseModel):
 	name: str
