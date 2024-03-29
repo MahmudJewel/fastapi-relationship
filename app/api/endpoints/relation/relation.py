@@ -15,7 +15,9 @@ from app.schemas.relation import (
     AllSkillsWithoutEmployee,
     SkillCreate,
     User,
-    UserCreate
+    UserCreate,
+    Visa,
+    VisaCreate
     )
 from app.api.endpoints.relation import functions as relation_functions
 
@@ -39,19 +41,19 @@ async def create_new_user(user: UserCreate, db: Session = Depends(get_db)):
 async def read_all_users( skip: int = 0, limit: int = 100,  db: Session = Depends(get_db)):
     return relation_functions.read_all_users(db, skip, limit)
 
-# # create new child 
-# @one2one_module.post('/child', response_model=Child)
-# async def create_new_child(child: ChildCreate, db: Session = Depends(get_db)):
-#     new_child = relation_functions.create_new_child(db, child)
-#     return new_child
+# create new visa 
+@one2one_module.post('/visa', response_model=Visa)
+async def create_new_visa(visa: VisaCreate, db: Session = Depends(get_db)):
+    new_visa = relation_functions.create_new_visa(db, visa)
+    return new_visa
 
-# # get all child list
-# @one2one_module.get('/child', 
-#             # response_model=list[Child],
-#             # dependencies=[Depends(RoleChecker(['admin']))]
-#             )
-# async def read_all_child( skip: int = 0, limit: int = 100,  db: Session = Depends(get_db)):
-#     return relation_functions.read_all_child(db, skip, limit)
+# get all visa list
+@one2one_module.get('/visa', 
+            response_model=list[Visa],
+            # dependencies=[Depends(RoleChecker(['admin']))]
+            )
+async def read_all_Visa( skip: int = 0, limit: int = 100,  db: Session = Depends(get_db)):
+    return relation_functions.read_all_visa(db, skip, limit)
 
 # @one2one_module.get('/child-with-parents-info', 
 #             response_model=list[Child],

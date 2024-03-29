@@ -5,13 +5,27 @@ from typing import Optional
 class UserCreate(BaseModel):
 	name: str
 
-class VisforUser(BaseModel):
+class VisaforUser(BaseModel):
 	id: int
 	name: str
 class User(BaseModel):
 	id: int
 	name: str
-	visa: Optional[VisforUser]
+	visa: Optional[VisaforUser]
+
+class VisaCreate(BaseModel):
+	name: str
+	visa_number: int
+	user_id: int | None = None
+
+class UserforVisa(BaseModel):
+	id: int
+	name: str
+class Visa(BaseModel):
+	id: int
+	name: str
+	visa_number: int | None = None
+	user: Optional[UserforVisa]
 
 # ================ foreign keys =================
 class ParentCreate(BaseModel):
