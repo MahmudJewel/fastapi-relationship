@@ -13,8 +13,6 @@ from app.schemas.relation import (
     AllSkills,
     SkillCreate
     )
-from app.core.settings import SECRET_KEY, ALGORITHM
-from app.core.dependencies import get_db, oauth2_scheme
 
 # ================== foreign key operation ===========================
 # create new parents
@@ -44,16 +42,18 @@ def read_all_child(db: Session, skip: int, limit: int):
 
 # get all child with parent details
 def read_all_child_with_parent_info(db: Session, skip: int, limit: int):
-    query = db.query(RelationModel.Child, RelationModel.Parent).join(RelationModel.Parent, RelationModel.Child.parent_id== RelationModel.Parent.id).offset(skip).limit(limit).all()
-    children_with_parent_info = []
-    for child, parent in query:
-        child_response = Child(
-            id=child.id,
-            name=child.name,
-            parent=[ParentsForChild(id=parent.id, name=parent.name)]
-        )
-        children_with_parent_info.append(child_response)
-    return children_with_parent_info
+    # query = db.query(RelationModel.Child, RelationModel.Parent).join(RelationModel.Parent, RelationModel.Child.parent_id== RelationModel.Parent.id).offset(skip).limit(limit).all()
+    # children_with_parent_info = []
+    # for child, parent in query:
+    #     child_response = Child(
+    #         id=child.id,
+    #         name=child.name,
+    #         parent=[ParentsForChild(id=parent.id, name=parent.name)]
+    #     )
+    #     children_with_parent_info.append(child_response)
+    # return children_with_parent_info
+    query = db.query(RelationModel.Child).offset(skip).limit(limit).all()
+    return query
 
 # =============== m2m operations ==========================
 # create new employee

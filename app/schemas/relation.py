@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import Optional
 
 # ================ foreign keys =================
 class ParentCreate(BaseModel):
@@ -23,33 +24,27 @@ class ParentsForChild(BaseModel):
 class Child(BaseModel):
 	id: int
 	name: str | None = None
-	parent: list[ParentsForChild] | None = None
+	parent: Optional[ParentsForChild]
 
 
 # ==================== many to many relations ======================
-
-
 # ============== employee =================
 class SkillBase(BaseModel):
 	name: str
-
 
 class EmployeeCreate(BaseModel):
 	name: str
 	skill: list[SkillBase] | None = None
 
-
 class SkillForEmployee(BaseModel):
 	id: int
 	name: str
-
 
 class AllEmployee(BaseModel):
 	id: int
 	name: str
 	# skill: List['Skill'] = []
 	skill: list[SkillForEmployee]
-
 
 # ==================== skills =========================
 class EmployeeBase(BaseModel):
